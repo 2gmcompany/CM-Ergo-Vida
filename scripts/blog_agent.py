@@ -190,9 +190,12 @@ def main():
     state = read_state()
     now = datetime.now(timezone.utc)
     last_check = datetime.fromisoformat(state["last_check"]) if state.get("last_check") else None
-    if last_check and now - last_check < INTERVAL:
+    force_now = os.getenv("FORCE_NOW", "false").lower() == "true"
+    if last_check and now - last_check < INTERVAL and not force_now:
         print("Ainda não passaram 48 horas desde a última verificação.")
         return
+    if force_now:
+        print("Execução manual: a verificar respostas novas pendentes agora.")
     info = json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"])
     credentials = Credentials.from_service_account_info(
         info, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly", "https://www.googleapis.com/auth/drive.readonly"]
