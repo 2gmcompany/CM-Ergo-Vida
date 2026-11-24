@@ -5,6 +5,12 @@ on:
     - cron: "0 8 * * *"
       timezone: Africa/Maputo
   workflow_dispatch:
+    inputs:
+      force_now:
+        description: Publicar agora as respostas novas que ainda estão pendentes
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -28,6 +34,7 @@ jobs:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-6.1-terra
+          FORCE_NOW: ${{ inputs.force_now || false }}
         run: python scripts/blog_agent.py
       - name: Save published posts and processing state
         run: |
