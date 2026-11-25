@@ -71,7 +71,11 @@ def row_id(row):
 
 def parse_timestamp(value):
     value = str(value).strip()
-    for fmt in ("%d/%m/%Y %H:%M:%S", "%d/%m/%Y %H:%M", "%m/%d/%Y %H:%M:%S", "%m/%d/%Y %H:%M"):
+    for fmt in (
+        "%d/%m/%Y %H:%M:%S", "%d/%m/%Y %H:%M",
+        "%m/%d/%Y %H:%M:%S", "%m/%d/%Y %H:%M",
+        "%Y/%m/%d %H:%M:%S", "%Y/%m/%d %H:%M",
+    ):
         try:
             return datetime.strptime(value, fmt).replace(tzinfo=MAPUTO)
         except ValueError:
